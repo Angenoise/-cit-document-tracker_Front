@@ -121,19 +121,30 @@
 
 @media (max-width: 768px) {
   .app-header {
-    padding: 20px 16px;
+    padding: 15px 10px;
+  }
+
+  .header-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo-item {
+    max-width: 80px;
   }
 
   .logo-item img {
-    height: 60px;
+    height: 50px;
   }
 
-  .header-logos {
-    gap: 20px;
+  .header-content {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
   }
 
   .header-content h1 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .header-content p {
@@ -149,7 +160,14 @@
     width: 100%;
     min-width: unset;
   }
+  
+  .user-info {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
 }
+
 
 .user-info {
   display: flex;

@@ -1,11 +1,16 @@
 .form-container {
   margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 .form-card {
   background: white;
   border-radius: 8px;
   padding: 28px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .form-card h2 {
