@@ -18,6 +18,18 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 const getApiErrorMessage = (err, fallbackMessage) => {
   const data = err?.response?.data
 
+  if (err?.response?.status === 401) {
+    if (data?.detail === 'Invalid token.') {
+      // Clear token since it's no longer valid
+      localStorage.removeItem('cit_auth_token')
+      localStorage.removeItem('cit_auth_user')
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+      return 'Session expired. Please log in again.'
+    }
+  }
+
   if (typeof data === 'string' && data.trim()) {
     return data
   }
