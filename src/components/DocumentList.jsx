@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import QRCode from 'qrcode.react'
+import { QRCodeCanvas as QRCode } from 'qrcode.react'
 import './DocumentList.css'
 
 function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }) {
