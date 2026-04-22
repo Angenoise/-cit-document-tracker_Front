@@ -2,32 +2,31 @@ import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import './DocumentForm.css'
 
+const getInitialFormData = (isAdmin, currentUser) => ({
+  title: '',
+  department: 'General',
+  doc_type: 'Memo',
+  description: '',
+  sender: '',
+  receiver: '',
+  status: 'Pending',
+  priority: 'Medium',
+  due_date: '',
+  remarks: '',
+  access_key: '',
+  owner: isAdmin ? '' : currentUser || '',
+  attachment: null,
+})
+
 function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
-  const [formData, setFormData] = useState({
-    title: '',
-    department: 'General',
-    doc_type: 'Memo',
-    description: '',
-    sender: '',
-    receiver: '',
-    status: 'Pending',
-    priority: 'Medium',
-    due_date: '',
-    remarks: '',
-    access_key: '',
-    owner: '',
-    attachment: null,
-  })
+  const [formData, setFormData] = useState(() => getInitialFormData(isAdmin, currentUser))
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    if (!isAdmin) {
-      setFormData((prev) => ({
-        ...prev,
-        owner: currentUser || '',
-      }))
-    }
+    // Reset document form whenever logged-in account context changes.
+    setFormData(getInitialFormData(isAdmin, currentUser))
+    setErrors({})
   }, [isAdmin, currentUser])
 
   const handleChange = (e) => {
@@ -133,13 +132,14 @@ function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
     <div className="form-container">
       <div className="form-card card">
         <h2>Create New Document</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="title">Document Title *</label>
             <input
               id="title"
               type="text"
               name="title"
+              autoComplete="off"
               value={formData.title}
               onChange={handleChange}
               placeholder="Enter document title"
@@ -201,6 +201,7 @@ function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
               id="sender"
               type="text"
               name="sender"
+              autoComplete="off"
               value={formData.sender}
               onChange={handleChange}
               placeholder="Enter sender name"
@@ -216,6 +217,7 @@ function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
               id="receiver"
               type="text"
               name="receiver"
+              autoComplete="off"
               value={formData.receiver}
               onChange={handleChange}
               placeholder="Enter receiver name"
@@ -231,6 +233,7 @@ function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
               id="access_key"
               type="password"
               name="access_key"
+              autoComplete="new-password"
               value={formData.access_key}
               onChange={handleChange}
               placeholder="Set document access key"
@@ -315,6 +318,7 @@ function DocumentForm({ onCreateDocument, isAdmin, currentUser }) {
                 id="owner"
                 type="text"
                 name="owner"
+                autoComplete="off"
                 value={formData.owner}
                 onChange={handleChange}
                 placeholder="Enter document owner"

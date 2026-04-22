@@ -84,13 +84,14 @@ function LoginForm({ onLogin, onRegister, loading, authError }) {
         </div>
 
         <h2>{mode === 'register' ? 'Create a New Account' : 'Login to Your Account'}</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
               id="username"
               type="text"
               name="username"
+              autoComplete="username"
               value={credentials.username}
               onChange={handleChange}
               placeholder="Enter username"
@@ -105,6 +106,7 @@ function LoginForm({ onLogin, onRegister, loading, authError }) {
               id="password"
               type="password"
               name="password"
+              autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
               value={credentials.password}
               onChange={handleChange}
               placeholder="Enter password"
@@ -120,6 +122,7 @@ function LoginForm({ onLogin, onRegister, loading, authError }) {
                 id="confirmPassword"
                 type="password"
                 name="confirmPassword"
+                autoComplete="new-password"
                 value={credentials.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm password"

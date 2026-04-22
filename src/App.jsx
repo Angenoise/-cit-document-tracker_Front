@@ -572,6 +572,7 @@ function App() {
               </div>
               <div className="create-document-focus">
                 <DocumentForm
+                  key={`user-create-${authUser.username}-${isAdmin ? 'admin' : 'user'}`}
                   onCreateDocument={handleCreateDocumentPanel}
                   isAdmin={isAdmin}
                   currentUser={authUser.username}
@@ -669,6 +670,7 @@ function App() {
                 </button>
               </div>
               <DocumentForm
+                key={`admin-create-${authUser.username}-${isAdmin ? 'admin' : 'user'}`}
                 onCreateDocument={handleCreateDocumentPanel}
                 isAdmin={isAdmin}
                 currentUser={authUser.username}
