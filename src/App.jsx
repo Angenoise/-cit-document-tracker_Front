@@ -489,21 +489,24 @@ function App() {
         {isAdmin && (
           <div className="dashboard-focus-shell">
             <AdminPanel stats={stats} />
-            <div className="dashboard-actions card">
-              <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
-                + Create Document
-              </button>
-              <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
-                {showQrLookupPanel ? 'Hide QR Lookup' : 'Open QR Lookup'}
-              </button>
-              <button className="btn-secondary" onClick={() => setShowDocumentList((prev) => !prev)}>
-                {showDocumentList ? 'Hide Document List' : 'Open Document List'}
-              </button>
-            </div>
           </div>
         )}
 
         {isAdmin && <UserManagement authHeaders={authHeaders} />}
+
+        {isAdmin && (
+          <div className="dashboard-actions card">
+            <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
+              + Create Document
+            </button>
+            <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
+              {showQrLookupPanel ? 'Hide QR Lookup' : 'Open QR Lookup'}
+            </button>
+            <button className="btn-secondary" onClick={() => setShowDocumentList((prev) => !prev)}>
+              {showDocumentList ? 'Hide Document List' : 'Open Document List'}
+            </button>
+          </div>
+        )}
 
         {!isAdmin && (
           <div className="user-focus-shell card">
