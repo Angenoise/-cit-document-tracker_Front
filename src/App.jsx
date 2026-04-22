@@ -377,18 +377,21 @@ function App() {
       return { success: false, error: message }
     }
 
-    if (!selectedDocumentKey) {
+    if (!isAdmin && !selectedDocumentKey) {
       const message = 'Open the document using a valid access key before editing.'
       toast.error(message)
       return { success: false, error: message }
     }
 
     try {
+      const headersConfig = authHeaders({
+        'Content-Type': 'application/json',
+      })
+      if (selectedDocumentKey) {
+        headersConfig['X-Document-Key'] = selectedDocumentKey
+      }
       const response = await axios.patch(`${API_BASE_URL}/documents/${documentId}/`, payload, {
-        headers: authHeaders({
-          'X-Document-Key': selectedDocumentKey,
-          'Content-Type': 'application/json',
-        }),
+        headers: headersConfig,
       })
 
       setSelectedDocument(response.data)
