@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
 import DocumentForm from './components/DocumentForm'
@@ -82,6 +82,9 @@ function App() {
   const [showQrLookupPanel, setShowQrLookupPanel] = useState(false)
   const [showDocumentList, setShowDocumentList] = useState(false)
 
+  const documentListRef = useRef(null)
+  const adminDocumentListRef = useRef(null)
+
   const isAdmin = Boolean(authUser?.is_staff)
   const isAuthenticated = Boolean(authToken && authUser)
 
@@ -130,6 +133,17 @@ function App() {
       setShowQrLookupPanel(true)
     }
   }, [isAuthenticated, initialQrEncryptedId])
+
+  useEffect(() => {
+    if (showDocumentList) {
+      const ref = isAdmin ? adminDocumentListRef : documentListRef
+      if (ref.current) {
+        setTimeout(() => {
+          ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 100)
+      }
+    }
+  }, [showDocumentList, isAdmin])
 
   const handleLogin = async (credentials) => {
     setAuthLoading(true)
@@ -552,7 +566,7 @@ function App() {
             </button>
 
             {showDocumentList && (
-              <div className="dropdown-panel">
+              <div className="dropdown-panel" ref={documentListRef}>
                 {loading ? (
                   <div className="loading">
                     <div className="spinner"></div>
@@ -572,7 +586,7 @@ function App() {
         )}
 
         {isAdmin && showDocumentList && (
-          <div className="dropdown-panel card">
+          <div className="dropdown-panel card" ref={adminDocumentListRef}>
             <div className="search-filter-section">
               <div className="search-box">
                 <input
