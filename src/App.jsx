@@ -3,7 +3,6 @@ import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
 import DocumentForm from './components/DocumentForm'
 import DocumentList from './components/DocumentList'
-import DocumentStats from './components/DocumentStats'
 import DocumentDetailModal from './components/DocumentDetailModal'
 import QrLookupPanel from './components/QrLookupPanel'
 import LoginForm from './components/LoginForm'
@@ -78,6 +77,9 @@ function App() {
   const [selectedDocumentKey, setSelectedDocumentKey] = useState('')
   const [qrLookupResult, setQrLookupResult] = useState(null)
   const [initialQrEncryptedId, setInitialQrEncryptedId] = useState('')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showQrLookupPanel, setShowQrLookupPanel] = useState(false)
+  const [showDocumentList, setShowDocumentList] = useState(false)
 
   const isAdmin = Boolean(authUser?.is_staff)
   const isAuthenticated = Boolean(authToken && authUser)
@@ -121,6 +123,12 @@ function App() {
       toast('QR link detected. Enter document key to continue.')
     }
   }, [initialQrEncryptedId])
+
+  useEffect(() => {
+    if (isAuthenticated && initialQrEncryptedId) {
+      setShowQrLookupPanel(true)
+    }
+  }, [isAuthenticated, initialQrEncryptedId])
 
   const handleLogin = async (credentials) => {
     setAuthLoading(true)
@@ -397,6 +405,22 @@ function App() {
   const owners = [...new Set(documents.map((doc) => doc.owner))].filter(Boolean)
   const qrBaseUrl = `${window.location.origin}${window.location.pathname}`
 
+  const handleCreateDocumentPanel = async (formData) => {
+    const result = await handleCreateDocument(formData)
+    if (result.success && isAdmin) {
+      setShowCreateModal(false)
+    }
+    return result
+  }
+
+  const handleQrLookup = async (encryptedId, accessKey) => {
+    const result = await resolveQrCode(encryptedId, accessKey)
+    if (isAdmin) {
+      setShowQrLookupPanel(false)
+    }
+    return result
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="app">
@@ -462,59 +486,157 @@ function App() {
       <div className="container">
         {error && <div className="error-banner">{error}</div>}
 
-        {stats && <DocumentStats stats={stats} />}
-
-        {isAdmin && <AdminPanel stats={stats} />}
+        {isAdmin && (
+          <div className="dashboard-focus-shell">
+            <AdminPanel stats={stats} />
+            <div className="dashboard-actions card">
+              <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
+                + Create Document
+              </button>
+              <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
+                {showQrLookupPanel ? 'Hide QR Lookup' : 'Open QR Lookup'}
+              </button>
+              <button className="btn-secondary" onClick={() => setShowDocumentList((prev) => !prev)}>
+                {showDocumentList ? 'Hide Document List' : 'Open Document List'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {isAdmin && <UserManagement authHeaders={authHeaders} />}
 
-        <DocumentForm
-          onCreateDocument={handleCreateDocument}
-          isAdmin={isAdmin}
-          currentUser={authUser.username}
-        />
-
-        <QrLookupPanel onLookup={resolveQrCode} initialEncryptedId={initialQrEncryptedId} />
-
-        <div className="search-filter-section">
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search by title, owner, sender, or status..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {isAdmin && owners.length > 0 && (
-            <div className="filter-box">
-              <select
-                value={filterOwner}
-                onChange={(e) => setFilterOwner(e.target.value)}
-              >
-                <option value="">All Owners</option>
-                {owners.map((owner) => (
-                  <option key={owner} value={owner}>
-                    {owner}
-                  </option>
-                ))}
-              </select>
+        {!isAdmin && (
+          <div className="user-focus-shell card">
+            <div className="user-actions-top">
+              <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
+                {showQrLookupPanel ? 'Hide QR Lookup' : 'QR Lookup'}
+              </button>
+              <div className="search-box user-search-box">
+                <input
+                  type="text"
+                  placeholder="Search by title, owner, sender, or status..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
             </div>
-          )}
-        </div>
 
-        {loading ? (
-          <div className="loading">
-            <div className="spinner"></div>
-            Loading documents...
+            {showQrLookupPanel && (
+              <div className="dropdown-panel">
+                <QrLookupPanel onLookup={handleQrLookup} initialEncryptedId={initialQrEncryptedId} />
+              </div>
+            )}
+
+            <div className="create-document-focus">
+              <DocumentForm
+                onCreateDocument={handleCreateDocumentPanel}
+                isAdmin={isAdmin}
+                currentUser={authUser.username}
+              />
+            </div>
+
+            <button
+              className="btn-secondary document-dropdown-trigger"
+              onClick={() => setShowDocumentList((prev) => !prev)}
+            >
+              {showDocumentList ? 'Hide Document List' : 'Show Document List'}
+            </button>
+
+            {showDocumentList && (
+              <div className="dropdown-panel">
+                {loading ? (
+                  <div className="loading">
+                    <div className="spinner"></div>
+                    Loading documents...
+                  </div>
+                ) : (
+                  <DocumentList
+                    documents={documents}
+                    onViewDocument={handleViewDocument}
+                    onDeleteDocument={handleDeleteDocument}
+                    qrBaseUrl={qrBaseUrl}
+                  />
+                )}
+              </div>
+            )}
           </div>
-        ) : (
-          <DocumentList
-            documents={documents}
-            onViewDocument={handleViewDocument}
-            onDeleteDocument={handleDeleteDocument}
-            qrBaseUrl={qrBaseUrl}
-          />
+        )}
+
+        {isAdmin && showDocumentList && (
+          <div className="dropdown-panel card">
+            <div className="search-filter-section">
+              <div className="search-box">
+                <input
+                  type="text"
+                  placeholder="Search by title, owner, sender, or status..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+
+              {owners.length > 0 && (
+                <div className="filter-box">
+                  <select
+                    value={filterOwner}
+                    onChange={(e) => setFilterOwner(e.target.value)}
+                  >
+                    <option value="">All Owners</option>
+                    {owners.map((owner) => (
+                      <option key={owner} value={owner}>
+                        {owner}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {loading ? (
+              <div className="loading">
+                <div className="spinner"></div>
+                Loading documents...
+              </div>
+            ) : (
+              <DocumentList
+                documents={documents}
+                onViewDocument={handleViewDocument}
+                onDeleteDocument={handleDeleteDocument}
+                qrBaseUrl={qrBaseUrl}
+              />
+            )}
+          </div>
+        )}
+
+        {isAdmin && showCreateModal && (
+          <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+            <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+              <div className="modal-header">
+                <h2>Create New Document</h2>
+                <button className="btn-secondary" onClick={() => setShowCreateModal(false)}>
+                  Close
+                </button>
+              </div>
+              <DocumentForm
+                onCreateDocument={handleCreateDocumentPanel}
+                isAdmin={isAdmin}
+                currentUser={authUser.username}
+              />
+            </div>
+          </div>
+        )}
+
+        {isAdmin && showQrLookupPanel && (
+          <div className="modal-overlay" onClick={() => setShowQrLookupPanel(false)}>
+            <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+              <div className="modal-header">
+                <h2>QR Lookup</h2>
+                <button className="btn-secondary" onClick={() => setShowQrLookupPanel(false)}>
+                  Close
+                </button>
+              </div>
+              <QrLookupPanel onLookup={handleQrLookup} initialEncryptedId={initialQrEncryptedId} />
+            </div>
+          </div>
         )}
 
         {selectedDocument && (
