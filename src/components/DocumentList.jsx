@@ -71,11 +71,11 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                     <span className="label">Dept:</span>
                     <span className="value">{doc.department}</span>
                   </div>
-                  <div className="detail-row">
+                  <div className="detail-row detail-row-status">
                     <span className="label">Status:</span>
                     <span className="value status-pill">{doc.status}</span>
                   </div>
-                  <div className="detail-row">
+                  <div className="detail-row detail-row-priority">
                     <span className="label">Priority:</span>
                     <span className="value priority-pill">{doc.priority}</span>
                   </div>
