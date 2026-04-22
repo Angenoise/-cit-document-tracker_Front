@@ -6,30 +6,39 @@
 
 .form-card {
   background: white;
-  border-radius: 8px;
-  padding: 28px;
+  border-radius: 12px;
+  padding: 32px;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
 }
 
 .form-card h2 {
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 12px;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 700;
+}
+
+.form-card > p {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 20px 0;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  font-weight: 500;
-  margin-bottom: 6px;
+  font-weight: 700;
+  margin-bottom: 8px;
   color: var(--text-dark);
   font-size: 14px;
+  text-transform: capitalize;
 }
 
 .form-group input,
@@ -37,11 +46,12 @@
 .form-group textarea {
   width: 100%;
   padding: 12px 14px;
-  border: 2px solid var(--border-color);
-  border-radius: 6px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   background: white;
+  font-family: inherit;
 }
 
 .form-group input:focus,
@@ -55,29 +65,45 @@
 .form-group input:disabled,
 .form-group select:disabled,
 .form-group textarea:disabled {
-  background-color: var(--bg-color);
+  background-color: #f3f4f6;
   cursor: not-allowed;
+  color: #9ca3af;
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 88px;
+  min-height: 100px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .form-group input[type="file"] {
-  padding: 10px 0;
+  padding: 8px 0;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button {
+  background: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
   border: none;
-  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 8px;
 }
 
 .form-error-message {
-  background-color: #ffe0e0;
-  border-left: 3px solid var(--danger-color);
-  color: #cc0000;
-  padding: 12px;
-  border-radius: 4px;
+  background-color: #fee2e2;
+  border-left: 4px solid #dc2626;
+  color: #991b1b;
+  padding: 12px 14px;
+  border-radius: 6px;
   margin-bottom: 16px;
   font-size: 13px;
+  font-weight: 500;
 }
 
 .btn-submit {
@@ -86,22 +112,24 @@
   background: linear-gradient(135deg, var(--primary-color), #0052a3);
   color: white;
   font-size: 15px;
-  font-weight: 600;
-  border-radius: 6px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  cursor: pointer;
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
 }
 
 .btn-submit:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -109,18 +137,20 @@
   margin-top: 16px;
   font-size: 13px;
   color: var(--text-light);
-  padding: 10px 12px;
+  padding: 12px 14px;
   background-color: #e8f4f8;
-  border-radius: 4px;
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
 }
 
 @media (max-width: 768px) {
   .form-card {
-    padding: 20px;
+    padding: 24px;
+    border-radius: 10px;
   }
 
   .form-card h2 {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 }
