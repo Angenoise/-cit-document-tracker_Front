@@ -41,10 +41,18 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
             <div key={doc.id} className="document-card card">
               <div className="card-header">
                 <div className="card-title-section">
-                  <h3>{doc.title}</h3>
-                  <p className="owner">👤 {doc.owner}</p>
-                  <p className="owner">No: {doc.document_number || 'Pending number'}</p>
-                  <p className="owner">Type: {doc.doc_type}</p>
+                  <div className="title-row">
+                    <span className="title-icon">📄</span>
+                    <h3>{doc.title}</h3>
+                  </div>
+                  <div className="owner-row">
+                    <div className="owner-avatar">{(doc.owner || '?').charAt(0).toUpperCase()}</div>
+                    <span className="owner-name">{doc.owner}</span>
+                  </div>
+                  <div className="mini-info-list">
+                    <div className="mini-info-item">Document No: {doc.document_number || 'Pending number'}</div>
+                    <div className="mini-info-item">Type: {doc.doc_type}</div>
+                  </div>
                 </div>
               </div>
 
@@ -56,26 +64,34 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                 <span className="meta-item">📅 {new Date(doc.created_at).toLocaleDateString()}</span>
               </div>
 
-              <div className="card-details">
-                <div className="detail-row">
-                  <span className="label">Dept:</span>
-                  <span className="value">{doc.department}</span>
+              <div className="card-body-grid">
+                <div className="card-details compact-section">
+                  <h4>Details</h4>
+                  <div className="detail-row">
+                    <span className="label">Dept:</span>
+                    <span className="value">{doc.department}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="label">Status:</span>
+                    <span className="value status-pill">{doc.status}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="label">Priority:</span>
+                    <span className="value priority-pill">{doc.priority}</span>
+                  </div>
                 </div>
-                <div className="detail-row">
-                  <span className="label">Status:</span>
-                  <span className="value">{doc.status}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="label">Priority:</span>
-                  <span className="value">{doc.priority}</span>
-                </div>
-              </div>
 
-              <div className="compact-info-row">
-                <div className="encrypted-info-block">
-                  <h4>Encrypted ID</h4>
-                  <div className="encrypted-id-display compact-field">
-                    <code>{doc.encrypted_id}</code>
+                <div className="qr-section compact-section">
+                  <h4>QR Code</h4>
+                  <div id={`qr-${doc.encrypted_id}`} className="qr-container compact-qr-container">
+                    <QRCode
+                      value={qrLink}
+                      size={170}
+                      level="H"
+                      includeMargin={true}
+                    />
+                  </div>
+                  <div className="qr-link-row">
                     <button
                       className="copy-btn btn-small"
                       onClick={() => copyToClipboard(doc.encrypted_id)}
@@ -83,25 +99,13 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                     >
                       📋
                     </button>
+                    <button
+                      className="btn-secondary btn-small download-qr-btn"
+                      onClick={() => downloadQR(doc.encrypted_id, doc.title)}
+                    >
+                      Download QR
+                    </button>
                   </div>
-                </div>
-
-                <div className="qr-mini-block">
-                  <h4>QR Code</h4>
-                  <div id={`qr-${doc.encrypted_id}`} className="qr-container compact-qr-container">
-                    <QRCode
-                      value={qrLink}
-                      size={160}
-                      level="H"
-                      includeMargin={true}
-                    />
-                  </div>
-                  <button
-                    className="btn-secondary btn-small download-qr-btn"
-                    onClick={() => downloadQR(doc.encrypted_id, doc.title)}
-                  >
-                    Download QR
-                  </button>
                 </div>
               </div>
 
