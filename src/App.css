@@ -337,13 +337,48 @@
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-start;
   margin-top: 16px;
   margin-bottom: 8px;
+  padding: 0;
 }
 
 .dashboard-actions .btn-primary,
 .dashboard-actions .btn-secondary {
   min-height: 42px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.dashboard-actions .btn-primary {
+  background: #0066cc;
+  color: white;
+  border: none;
+}
+
+.dashboard-actions .btn-primary:hover {
+  background: #0052a3;
+}
+
+.dashboard-actions .btn-secondary:nth-child(2) {
+  background: #10b981;
+  color: white;
+  border: none;
+}
+
+.dashboard-actions .btn-secondary:nth-child(2):hover {
+  background: #059669;
+}
+
+.dashboard-actions .btn-secondary:nth-child(3) {
+  background: #ef4444;
+  color: white;
+  border: none;
+}
+
+.dashboard-actions .btn-secondary:nth-child(3):hover {
+  background: #dc2626;
 }
 
 .user-focus-shell {

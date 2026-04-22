@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
 import DocumentForm from './components/DocumentForm'
 import DocumentList from './components/DocumentList'
+import DocumentStats from './components/DocumentStats'
 import DocumentDetailModal from './components/DocumentDetailModal'
 import QrLookupPanel from './components/QrLookupPanel'
 import LoginForm from './components/LoginForm'
@@ -510,6 +511,8 @@ function App() {
 
         {!isAdmin && (
           <div className="user-focus-shell card">
+            <DocumentStats stats={stats} isUserView={true} />
+            
             <div className="user-actions-top">
               <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
                 {showQrLookupPanel ? 'Hide QR Lookup' : 'QR Lookup'}
