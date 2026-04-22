@@ -71,10 +71,10 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                 </div>
               </div>
 
-              <div className="card-expanded">
-                <div className="encryption-info">
-                  <h4>Encrypted ID (Copy/Paste)</h4>
-                  <div className="encrypted-id-display">
+              <div className="compact-info-row">
+                <div className="encrypted-info-block">
+                  <h4>Encrypted ID</h4>
+                  <div className="encrypted-id-display compact-field">
                     <code>{doc.encrypted_id}</code>
                     <button
                       className="copy-btn btn-small"
@@ -84,35 +84,23 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                       📋
                     </button>
                   </div>
-                  <p className="encryption-note">Use this value in QR Lookup if scanning is difficult.</p>
-                  <div className="encrypted-id-display" style={{ marginTop: '10px' }}>
-                    <code>{qrLink}</code>
-                    <button
-                      className="copy-btn btn-small"
-                      onClick={() => copyToClipboard(qrLink)}
-                      title="Copy QR access link"
-                    >
-                      🔗
-                    </button>
-                  </div>
-                  <p className="encryption-note">QR now contains this secure document link.</p>
                 </div>
 
-                <div className="qr-section">
-                  <h4>🔗 QR Code</h4>
-                  <div id={`qr-${doc.encrypted_id}`} className="qr-container">
+                <div className="qr-mini-block">
+                  <h4>QR Code</h4>
+                  <div id={`qr-${doc.encrypted_id}`} className="qr-container compact-qr-container">
                     <QRCode
                       value={qrLink}
-                      size={200}
+                      size={160}
                       level="H"
                       includeMargin={true}
                     />
                   </div>
                   <button
-                    className="btn-secondary btn-small"
+                    className="btn-secondary btn-small download-qr-btn"
                     onClick={() => downloadQR(doc.encrypted_id, doc.title)}
                   >
-                    ⬇️ Download QR
+                    Download QR
                   </button>
                 </div>
               </div>
