@@ -6,36 +6,30 @@ function DocumentStats({ stats, isUserView = false }) {
 
   if (isUserView) {
     return (
-      <div className="system-overview-container card">
-        <div className="system-overview-header">
-          <h2>📊 System Overview</h2>
-          <p>Your document activity and status summary.</p>
+      <div className="stats-grid user-stats-grid">
+        <div className="stat-card stat-card-blue">
+          <div className="stat-icon">📄</div>
+          <div className="stat-content">
+            <h3>{stats.total_documents}</h3>
+            <p>Active Documents</p>
+          </div>
         </div>
-        <div className="stats-grid user-stats-grid">
-          <div className="stat-card stat-card-blue">
-            <div className="stat-icon">📄</div>
-            <div className="stat-content">
-              <h3>{stats.total_documents}</h3>
-              <p>Active Documents</p>
-            </div>
-          </div>
 
-          <div className="stat-card stat-card-green">
-            <div className="stat-icon">👤</div>
-            <div className="stat-content">
-              <h3>{stats.unique_owners}</h3>
-              <p>Owned Documents</p>
-            </div>
+        <div className="stat-card stat-card-green">
+          <div className="stat-icon">👤</div>
+          <div className="stat-content">
+            <h3>{stats.unique_owners}</h3>
+            <p>Owned Documents</p>
           </div>
+        </div>
 
-          <div className="stat-card stat-card-red">
-            <div className="stat-icon">📋</div>
-            <div className="stat-content">
-              <h3>
-                {stats.status_counts?.pending || 0}
-              </h3>
-              <p>Status: Pending</p>
-            </div>
+        <div className="stat-card stat-card-red">
+          <div className="stat-icon">📋</div>
+          <div className="stat-content">
+            <h3>
+              {stats.status_counts?.pending || 0}
+            </h3>
+            <p>Status: Pending</p>
           </div>
         </div>
       </div>

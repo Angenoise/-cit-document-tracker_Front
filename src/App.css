@@ -70,6 +70,64 @@
   font-weight: 500;
 }
 
+.user-dashboard {
+  display: grid;
+  gap: 18px;
+}
+
+.page-section {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.section-header {
+  margin-bottom: 14px;
+}
+
+.section-header h2 {
+  margin: 0 0 4px;
+  color: #031B40;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.section-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.user-panel-inner {
+  margin-top: 10px;
+  background: rgba(248, 250, 252, 0.96);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.create-document-focus .form-container {
+  margin-bottom: 0;
+}
+
+.create-document-focus .form-card {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+
+.document-dropdown-trigger {
+  min-width: 180px;
+}
+
 .search-filter-section {
   display: flex;
   gap: 12px;
@@ -160,6 +218,22 @@
     width: 100%;
     min-width: unset;
   }
+
+  .page-section {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .section-header-row,
+  .user-actions-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .document-dropdown-trigger,
+  .user-search-box {
+    min-width: 100%;
+  }
   
   .user-info {
     flex-direction: column;
@@ -183,6 +257,18 @@
 
 .user-info span {
   font-weight: 600;
+}
+
+.user-actions-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.user-search-box {
+  min-width: 280px;
+  flex: 1;
 }
 
 .btn-secondary {

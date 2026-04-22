@@ -527,61 +527,90 @@ function App() {
         )}
 
         {!isAdmin && (
-          <div className="user-focus-shell card">
-            <DocumentStats stats={stats} isUserView={true} />
-            
-            <div className="user-actions-top">
-              <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
-                {showQrLookupPanel ? 'Hide QR Lookup' : 'QR Lookup'}
-              </button>
-              <div className="search-box user-search-box">
-                <input
-                  type="text"
-                  placeholder="Search by title, owner, sender, or status..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="user-dashboard">
+            <div className="page-section card">
+              <div className="section-header">
+                <h2>System Overview</h2>
+                <p>Your document activity and status summary.</p>
+              </div>
+              <DocumentStats stats={stats} isUserView={true} />
+            </div>
+
+            <div className="page-section card">
+              <div className="section-header section-header-row">
+                <div>
+                  <h2>Quick Actions</h2>
+                  <p>Search documents or resolve a QR link.</p>
+                </div>
+                <button className="btn-secondary" onClick={() => setShowQrLookupPanel((prev) => !prev)}>
+                  {showQrLookupPanel ? 'Hide QR Lookup' : 'QR Lookup'}
+                </button>
+              </div>
+
+              <div className="user-actions-top">
+                <div className="search-box user-search-box">
+                  <input
+                    type="text"
+                    placeholder="Search by title, owner, sender, or status..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {showQrLookupPanel && (
+                <div className="dropdown-panel user-panel-inner">
+                  <QrLookupPanel onLookup={handleQrLookup} initialEncryptedId={initialQrEncryptedId} />
+                </div>
+              )}
+            </div>
+
+            <div className="page-section card">
+              <div className="section-header">
+                <h2>Create New Document</h2>
+                <p>Create and encrypt a new document.</p>
+              </div>
+              <div className="create-document-focus">
+                <DocumentForm
+                  onCreateDocument={handleCreateDocumentPanel}
+                  isAdmin={isAdmin}
+                  currentUser={authUser.username}
                 />
               </div>
             </div>
 
-            {showQrLookupPanel && (
-              <div className="dropdown-panel">
-                <QrLookupPanel onLookup={handleQrLookup} initialEncryptedId={initialQrEncryptedId} />
+            <div className="page-section card">
+              <div className="section-header section-header-row">
+                <div>
+                  <h2>Document List</h2>
+                  <p>View and manage your documents.</p>
+                </div>
+                <button
+                  className="btn-secondary document-dropdown-trigger"
+                  onClick={() => setShowDocumentList((prev) => !prev)}
+                >
+                  {showDocumentList ? 'Hide Document List' : 'Show Document List'}
+                </button>
               </div>
-            )}
 
-            <div className="create-document-focus">
-              <DocumentForm
-                onCreateDocument={handleCreateDocumentPanel}
-                isAdmin={isAdmin}
-                currentUser={authUser.username}
-              />
+              {showDocumentList && (
+                <div className="dropdown-panel user-panel-inner" ref={documentListRef}>
+                  {loading ? (
+                    <div className="loading">
+                      <div className="spinner"></div>
+                      Loading documents...
+                    </div>
+                  ) : (
+                    <DocumentList
+                      documents={documents}
+                      onViewDocument={handleViewDocument}
+                      onDeleteDocument={handleDeleteDocument}
+                      qrBaseUrl={qrBaseUrl}
+                    />
+                  )}
+                </div>
+              )}
             </div>
-
-            <button
-              className="btn-secondary document-dropdown-trigger"
-              onClick={() => setShowDocumentList((prev) => !prev)}
-            >
-              {showDocumentList ? 'Hide Document List' : 'Show Document List'}
-            </button>
-
-            {showDocumentList && (
-              <div className="dropdown-panel" ref={documentListRef}>
-                {loading ? (
-                  <div className="loading">
-                    <div className="spinner"></div>
-                    Loading documents...
-                  </div>
-                ) : (
-                  <DocumentList
-                    documents={documents}
-                    onViewDocument={handleViewDocument}
-                    onDeleteDocument={handleDeleteDocument}
-                    qrBaseUrl={qrBaseUrl}
-                  />
-                )}
-              </div>
-            )}
           </div>
         )}
 
