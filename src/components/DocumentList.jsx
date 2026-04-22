@@ -1,14 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { QRCodeCanvas as QRCode } from 'qrcode.react'
 import './DocumentList.css'
 
 function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }) {
-  const [expandedId, setExpandedId] = useState(null)
-
-  const toggleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id)
-  }
-
   const buildQrLink = (encryptedId) => `${qrBaseUrl}?qr=${encodeURIComponent(encryptedId)}`
 
   const downloadQR = (encryptedId, title) => {
@@ -45,33 +39,38 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
           const qrLink = buildQrLink(doc.encrypted_id)
           return (
             <div key={doc.id} className="document-card card">
-            <div className="card-header">
-              <div className="card-title-section">
-                <h3>{doc.title}</h3>
-                <p className="owner">👤 {doc.owner}</p>
-                <p className="owner">No: {doc.document_number || 'Pending number'}</p>
-                <p className="owner">Type: {doc.doc_type}</p>
+              <div className="card-header">
+                <div className="card-title-section">
+                  <h3>{doc.title}</h3>
+                  <p className="owner">👤 {doc.owner}</p>
+                  <p className="owner">No: {doc.document_number || 'Pending number'}</p>
+                  <p className="owner">Type: {doc.doc_type}</p>
+                </div>
               </div>
-              <button
-                className="expand-btn"
-                onClick={() => toggleExpand(doc.id)}
-              >
-                {expandedId === doc.id ? '▼' : '▶'}
-              </button>
-            </div>
 
-            <div className="card-meta">
-              <span className="meta-item">
-                🆔 <strong>Enc ID:</strong>
-                <code className="doc-id">{(doc.idea_encrypted_internal_id || '').substring(0, 12)}...</code>
-              </span>
-              <span className="meta-item">📅 {new Date(doc.created_at).toLocaleDateString()}</span>
-              <span className="meta-item">Dept: {doc.department}</span>
-              <span className="meta-item">Status: {doc.status}</span>
-              <span className="meta-item">Priority: {doc.priority}</span>
-            </div>
+              <div className="card-meta">
+                <span className="meta-item">
+                  🆔 <strong>Enc ID:</strong>
+                  <code className="doc-id">{(doc.idea_encrypted_internal_id || '').substring(0, 12)}...</code>
+                </span>
+                <span className="meta-item">📅 {new Date(doc.created_at).toLocaleDateString()}</span>
+              </div>
 
-            {expandedId === doc.id && (
+              <div className="card-details">
+                <div className="detail-row">
+                  <span className="label">Dept:</span>
+                  <span className="value">{doc.department}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">Status:</span>
+                  <span className="value">{doc.status}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">Priority:</span>
+                  <span className="value">{doc.priority}</span>
+                </div>
+              </div>
+
               <div className="card-expanded">
                 <div className="encryption-info">
                   <h4>Encrypted ID (Copy/Paste)</h4>
@@ -117,18 +116,17 @@ function DocumentList({ documents, onViewDocument, onDeleteDocument, qrBaseUrl }
                   </button>
                 </div>
               </div>
-            )}
 
-            <div className="card-actions">
-              <button className="btn-secondary btn-small" onClick={() => onViewDocument(doc)}>
-                View
-              </button>
-              {onDeleteDocument && (
-                <button className="btn-danger btn-small" onClick={() => onDeleteDocument(doc.id)}>
-                  Delete
+              <div className="card-actions">
+                <button className="btn-secondary btn-small" onClick={() => onViewDocument(doc)}>
+                  View
                 </button>
-              )}
-            </div>
+                {onDeleteDocument && (
+                  <button className="btn-danger btn-small" onClick={() => onDeleteDocument(doc.id)}>
+                    Delete
+                  </button>
+                )}
+              </div>
             </div>
           )
         })}
